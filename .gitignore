@@ -3,4 +3,5 @@ node_modules/
 .env
 token.json
 out.mp4
+tmp
 

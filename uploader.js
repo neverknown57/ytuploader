@@ -1,7 +1,5 @@
 const axios = require('axios')
-const cheerio = require('cheerio')
 const fs = require('node:fs')
-const { ytuploader } = require('./auth')
 const url = 'https://www.instagram.com/reels/DST9MR5DuuC/'
 // scrap(url);
 const title_func = (s) => {
@@ -40,7 +38,9 @@ const meta_data = async (url) => {
 
         };
     } catch (e) {
-        return { 'error': e };
+        console.log(e.name);
+        throw new Error('Invalid reel URL');
+
     }
 }
 module.exports = {

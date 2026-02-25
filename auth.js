@@ -31,31 +31,21 @@ authRoute.get('/oauth2callback', async (req, res) => {
         code = '4/0AfrIepBzXbpowAEH_dRzM0OAKHUnk5xup16FEsLoJH1c-4KLAJSDtI4cKyd6iaBtVSofhg';
     console.log(code)
     const { tokens } = await oauth2Client.getToken(code);
-    // Save tokens securely (DB, encrypted storage)
-    // console.log('Access Token:', tokens.access_token);
-    // console.log('Refresh Token:', tokens.refresh_token);
     await fs.writeFileSync('token.json', JSON.stringify(tokens))
     try {
 
-        oauth2Client.setCredentials(
+        await oauth2Client.setCredentials(
             tokens
         );
+        res.redirect('../')
     } catch {
         console.log("error");
     }
-
 
     res.send('Authorization successful! You can now call YouTube API.');
 
 });
 authRoute.get('/callback', async (req, res) => {
-
-    // code = '4/0AfrIepBzXbpowAEH_dRzM0OAKHUnk5xup16FEsLoJH1c-4KLAJSDtI4cKyd6iaBtVSofhg';
-    // console.log(code)
-    // const { tokens } = await oauth2Client.getToken(code);
-    // Save tokens securely (DB, encrypted storage)
-    // console.log('Access Token:', tokens.access_token);
-    // console.log('Refresh Token:', tokens.refresh_token);
 
     try {
 
@@ -66,8 +56,9 @@ authRoute.get('/callback', async (req, res) => {
         console.log("error");
     }
 
-
+    res.redirect('/')
     res.send('Authorization successful! You can now call YouTube API.');
+
 
 });
 const setCred = async () => {
@@ -117,6 +108,7 @@ const ytInsert = async ({ title, tag, description }) => {
 const uploader = async ({ vid_link, title, description, tag }) => {
     // console.log(vid_link)
     console.log('from upload')
+    console.log('axios url : ', vid_link)
     try {
         const response = await axios.get(
             vid_link, {

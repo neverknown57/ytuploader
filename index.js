@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const { igdl } = require('ab-downloader');
 const { meta_data } = require('./uploader')
-const { ytuploader, authRoute } = require('./auth')
+const { ytuploader, authRoute } = require('./auth');
 require('dotenv').config();
 
 
@@ -27,11 +27,13 @@ app.post('/video', async (req, res) => {
             throw new Error('send valid reel link')
         const { vid_link, title, description, tag } = await meta_data(reelUrl);
         // console.log(description)
-
+        if (vid_link == null)
+            throw new Error('unable to get meta data')
         const details = await ytuploader({ vid_link, title, description, tag })
-        res.json(details)
+        res.json({ ...details })
     } catch (e) {
-        res.send({ error: e });
+        // console.log(e);
+        res.status(500).send(e.message);
     }
 })
 const PORT = process.env.PORT | 3000;

@@ -38,9 +38,9 @@ authRoute.get('/oauth2callback', async (req, res) => {
         res.redirect('../')
     } catch {
         console.log("error");
+        res.status(500).send('Authorization Fail!');
     }
 
-    res.send('Authorization successful! You can now call YouTube API.');
 
 });
 authRoute.get('/callback', async (req, res) => {
@@ -50,12 +50,12 @@ authRoute.get('/callback', async (req, res) => {
         oauth2Client.setCredentials(
             access_token, refresh_token
         );
-    } catch {
+    } catch (e) {
         console.log("error");
     }
 
+    console.log('Authorization successful! You can now call YouTube API.');
     res.redirect('/')
-    res.send('Authorization successful! You can now call YouTube API.');
 
 
 });

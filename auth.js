@@ -94,7 +94,7 @@ const ytInsert = async ({ title, tag, description }) => {
                 // }
             },
             media: {
-                body: fs.createReadStream('tmp/out.mp4')
+                body: fs.createReadStream('/tmp/out.mp4')
             }
         }, { uploadType: 'resumable' })
         console.log('uploaded video');
@@ -123,7 +123,7 @@ const uploader = async ({ vid_link, title, description, tag }) => {
         var vs = response.data;
         console.log('fetching');
         // Create a write stream to save the file
-        const writeStream = fs.createWriteStream('tmp/out.mp4');
+        const writeStream = fs.createWriteStream('/tmp/out.mp4');
         // // Handle events
         return await new Promise((resolve, reject) => {
             response.data.pipe(writeStream);

@@ -31,7 +31,7 @@ authRoute.get('/oauth2callback', async (req, res) => {
         const { code } = req.query
         console.log(code)
         const { tokens } = await oauth2Client.getToken(code);
-        await fs.writeFileSync('token.json', JSON.stringify(tokens))
+        await fs.writeFileSync('/tmp/token.json', JSON.stringify(tokens))
         await oauth2Client.setCredentials(
             tokens
         );
@@ -61,7 +61,7 @@ authRoute.get('/callback', async (req, res) => {
 });
 const setCred = async () => {
     try {
-        const token = await fs.readFileSync('token.json')
+        const token = await fs.readFileSync('/tmp/token.json')
         const tokens = JSON.parse(token);
 
         oauth2Client.setCredentials(
@@ -94,7 +94,7 @@ const ytInsert = async ({ title, tag, description }) => {
                 // }
             },
             media: {
-                body: fs.createReadStream('tmp/out.mp4')
+                body: fs.createReadStream('/tmp/out.mp4')
             }
         }, { uploadType: 'resumable' })
         console.log('uploaded video');
@@ -123,7 +123,7 @@ const uploader = async ({ vid_link, title, description, tag }) => {
         var vs = response.data;
         console.log('fetching');
         // Create a write stream to save the file
-        const writeStream = fs.createWriteStream('tmp/out.mp4');
+        const writeStream = fs.createWriteStream('/tmp/out.mp4');
         // // Handle events
         return await new Promise((resolve, reject) => {
             response.data.pipe(writeStream);

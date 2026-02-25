@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Instagram Reel Downloader</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background-color: #f9f9f9;
+      }
+      .container {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      input[type="url"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #3897f0;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #2f80ed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>UPload Instagram Reel</h2>
+      <form action="/video" method="POST">
+        <label for="reelUrl">Enter Instagram Reel Link:</label>
+        <input
+          type="url"
+          id="reelUrl"
+          name="reelUrl"
+          placeholder="https://www.instagram.com/reel/..."
+          required />
+        <button type="submit">Download</button>
+      </form>
+    </div>
+  </body>
+</html>

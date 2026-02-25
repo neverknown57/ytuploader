@@ -1,0 +1,42 @@
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const { igdl } = require('ab-downloader');
+const { meta_data } = require('./uploader')
+const { ytuploader, authRoute } = require('./auth')
+require('dotenv').config();
+
+
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use('/', authRoute);
+
+
+app.get('/', (req, res) => {
+    console.log(process.env.token)
+    res.sendFile(path.join(__dirname + '/public/index.html'));
+});
+//rough work
+
+app.post('/video', async (req, res) => {
+    const { reelUrl } = req.body
+    try {
+        if (reelUrl && !reelUrl.includes('reel'))
+            throw new Error('send valid reel link')
+        const { vid_link, title, description, tag } = await meta_data(reelUrl);
+        // console.log(description)
+
+        const details = await ytuploader({ vid_link, title, description, tag })
+        res.json(details)
+    } catch (e) {
+        res.send({ error: e });
+    }
+})
+const PORT = process.env.PORT | 3000;
+app.listen(PORT, () => {
+    console.log('Server started :', PORT)
+    // set();
+});
+

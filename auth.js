@@ -31,7 +31,7 @@ authRoute.get('/oauth2callback', async (req, res) => {
         const { code } = req.query
         console.log(code)
         const { tokens } = await oauth2Client.getToken(code);
-        await fs.writeFileSync('token.json', JSON.stringify(tokens))
+        await fs.writeFileSync('/tmp/token.json', JSON.stringify(tokens))
         await oauth2Client.setCredentials(
             tokens
         );
@@ -61,7 +61,7 @@ authRoute.get('/callback', async (req, res) => {
 });
 const setCred = async () => {
     try {
-        const token = await fs.readFileSync('token.json')
+        const token = await fs.readFileSync('/tmp/token.json')
         const tokens = JSON.parse(token);
 
         oauth2Client.setCredentials(

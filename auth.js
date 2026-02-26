@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const axios = require("axios");
 const { google } = require('googleapis');
 const { error } = require('console');
@@ -69,10 +69,12 @@ const setCred = async () => {
         );
         console.log("success full credentials set")
     } catch {
+
         console.log("error Authenticate first");
+        throw new Error('Authenticate First');
     }
 }
-setCred();
+// await setCred();
 const youtube = google.youtube({
     version: 'v3',
     auth: oauth2Client
@@ -156,4 +158,5 @@ const uploader = async ({ vid_link, title, description, tag }) => {
 module.exports = {
     ytuploader: uploader,
     authRoute,
+    setCred
 }

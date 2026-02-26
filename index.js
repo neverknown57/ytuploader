@@ -4,11 +4,14 @@ const path = require('path');
 const express = require('express');
 const { igdl } = require('ab-downloader');
 const { meta_data } = require('./uploader')
-const { ytuploader, authRoute } = require('./auth');
+const { ytuploader, authRoute, setCred } = require('./auth');
+const { webhook } = require('./webhook');
 require('dotenv').config();
 
 
 const app = express();
+app.use('/wb', webhook)
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/', authRoute);
@@ -23,6 +26,7 @@ app.get('/', (req, res) => {
 app.post('/video', async (req, res) => {
     const { reelUrl } = req.body
     try {
+        setCred();
         if (reelUrl && !reelUrl.includes('reel'))
             throw new Error('send valid reel link')
         const { vid_link, title, description, tag } = await meta_data(reelUrl);

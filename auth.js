@@ -1,8 +1,9 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const axios = require("axios");
 const { google } = require('googleapis');
 const { error } = require('console');
-const express = require('express')
+const express = require('express');
+const { resolve } = require('path');
 require('dotenv').config();
 
 const id = process.env.id;
@@ -31,47 +32,32 @@ authRoute.get('/oauth2callback', async (req, res) => {
         const { code } = req.query
         console.log(code)
         const { tokens } = await oauth2Client.getToken(code);
-        await fs.writeFileSync('/tmp/token.json', JSON.stringify(tokens))
+        fs.writeFileSync('./tmp/token.json', JSON.stringify(tokens))
         await oauth2Client.setCredentials(
             tokens
         );
         res.redirect('../')
-    } catch {
-        console.log("error");
-        res.status(500).send('Authorization Fail!');
-    }
-
-
-});
-authRoute.get('/callback', async (req, res) => {
-
-    try {
-
-        oauth2Client.setCredentials(
-            access_token, refresh_token
-        );
     } catch (e) {
-        console.log("error");
+        console.log(e);
+        res.status(500).send('Authorization Fail!', e.message);
     }
-
-    console.log('Authorization successful! You can now call YouTube API.');
-    res.redirect('/')
 
 
 });
+
 const setCred = async () => {
     try {
-        const token = await fs.readFileSync('/tmp/token.json')
+        const token = fs.readFileSync('./tmp/token.json')
         const tokens = JSON.parse(token);
 
-        oauth2Client.setCredentials(
+        await oauth2Client.setCredentials(
             tokens
         );
         console.log("success full credentials set")
-    } catch {
+    } catch (e) {
 
-        console.log("error Authenticate first");
-        throw new Error('Authenticate First');
+        console.log(e);
+        // throw new Error('Authenticate First',e.message);
     }
 }
 // await setCred();

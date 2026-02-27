@@ -8,7 +8,7 @@ const allowed_sender = ["887957197333087"];
 const reply_status = async (id, message) => {
     try {
         const url = "https://graph.instagram.com/v25.0/17841403955423740/messages"
-        console.log(id)
+        console.log(message)
         await axios.post(url,
             {
                 "message": { "text": message },
@@ -29,9 +29,10 @@ const reply_status = async (id, message) => {
 const msg = async (entry) => {
     const msg = entry[0].messaging[0];
     const sender_id = msg.sender['id'];
-    console.log(sender_id);
+    console.log("msg = ", sender_id);
     if (allowed_sender.includes(sender_id)) {
         const message = msg.message
+        console.log('saurabh is sender')
         // console.log(message?.attachments)
         if (message?.attachments?.[0]["type"] === 'ig_reel') {
             const { url, title } = message.attachments[0]['payload'];

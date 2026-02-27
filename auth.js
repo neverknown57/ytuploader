@@ -72,8 +72,9 @@ const setCred = async () => {
     }
 }
 setCred();
-const pwd = path.join(__dirname + '/tmp/out.mp4')
-
+const baseDir = process.env.VERCEL ? "/tmp" : process.cwd();
+console.log(baseDir);
+const pwd = path.join(baseDir, 'out.mp4')
 const youtube = google.youtube({
     version: 'v3',
     auth: oauth2Client

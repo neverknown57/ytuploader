@@ -4,7 +4,7 @@ const { title_func, hashtags } = require("./uploader")
 const axios = require('axios');
 require("dotenv")
 
-const allowed_sender = ["887957197333087"];
+const allowed_sender = ["887957197333087", "1885917932054540"];
 const reply_status = async (id, message) => {
     try {
         const url = "https://graph.instagram.com/v25.0/17841403955423740/messages"
@@ -54,7 +54,7 @@ const msg = async (entry) => {
                 reply = e.message
 
             }
-            reply_status(sender_id, reply);
+            await reply_status(sender_id, reply);
 
         }
         else {

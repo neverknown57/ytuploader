@@ -29,7 +29,7 @@ webhook.get(['/facebook', '/instagram', '/threads'], function (req, res) {
         res.sendStatus(400);
     }
 });
-webhook.post('/instagram', function (req, res) {
+webhook.post('/instagram', async (req, res) => {
     console.log('Instagram request body:');
     // console.log(req.body);
     // Process the Instagram updates here
@@ -37,6 +37,7 @@ webhook.post('/instagram', function (req, res) {
     msg(req.body.entry)
     received_updates.unshift(req.body);
     res.sendStatus(200);
+    console.e
 });
 
 module.exports = {

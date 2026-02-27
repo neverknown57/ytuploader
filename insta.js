@@ -57,6 +57,9 @@ const msg = async (entry) => {
             reply_status(sender_id, reply);
 
         }
+        else {
+            console.log('wrong attachment')
+        }
     } else {
         console.log('unrecognised event')
     }

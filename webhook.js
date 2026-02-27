@@ -31,8 +31,9 @@ webhook.get(['/facebook', '/instagram', '/threads'], function (req, res) {
 });
 webhook.post('/instagram', function (req, res) {
     console.log('Instagram request body:');
-    console.log(req.body);
+    // console.log(req.body);
     // Process the Instagram updates here
+
     msg(req.body.entry)
     received_updates.unshift(req.body);
     res.sendStatus(200);

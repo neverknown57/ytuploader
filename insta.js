@@ -36,8 +36,8 @@ const msg = async (entry) => {
         // console.log(message?.attachments)
         if (message?.attachments?.[0]["type"] === 'ig_reel') {
             const { url, title } = message.attachments[0]['payload'];
-            // console.log(url);
-            let reply = url;
+            console.log('ig_reel');
+            let reply = 'not able to upload';
             try {
                 await setCred();
                 const { data: { id } } = await ytuploader({

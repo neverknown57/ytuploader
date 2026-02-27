@@ -1,5 +1,6 @@
 const express = require('express')
 var xhub = require('express-x-hub');
+const msg = require("./insta")
 require('dotenv')
 var app = express();
 const webhook = express.Router();
@@ -32,6 +33,7 @@ webhook.post('/instagram', function (req, res) {
     console.log('Instagram request body:');
     console.log(req.body);
     // Process the Instagram updates here
+    msg(req.body.entry)
     received_updates.unshift(req.body);
     res.sendStatus(200);
 });

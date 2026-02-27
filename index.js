@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.post('/video', async (req, res) => {
     const { reelUrl } = req.body
     try {
-        setCred();
+        await setCred();
         if (reelUrl && !reelUrl.includes('reel'))
             throw new Error('send valid reel link')
         const { vid_link, title, description, tag } = await meta_data(reelUrl);

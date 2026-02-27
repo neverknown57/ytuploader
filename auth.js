@@ -3,7 +3,8 @@ const axios = require("axios");
 const { google } = require('googleapis');
 const { error } = require('console');
 const express = require('express');
-const { resolve } = require('path');
+const path = require('path');
+const { get, put } = require("@vercel/blob")
 require('dotenv').config();
 
 const id = process.env.id;
@@ -30,9 +31,16 @@ authRoute.get('/oauth2callback', async (req, res) => {
     try {
 
         const { code } = req.query
-        console.log(code)
+        // console.log(code)
         const { tokens } = await oauth2Client.getToken(code);
-        fs.writeFileSync('./tmp/token.json', JSON.stringify(tokens))
+        const t = JSON.stringify(tokens)
+        // fs.writeFileSync('./tmp/token.json',)
+        const blob_url = await put('token.json', t, {
+            access: 'private',
+            allowOverwrite: 'true',
+            token: process.env.BLOB_READ_WRITE_TOKEN
+        });
+        // console.log("blob -->", blob_url);
         await oauth2Client.setCredentials(
             tokens
         );
@@ -41,26 +49,31 @@ authRoute.get('/oauth2callback', async (req, res) => {
         console.log(e);
         res.status(500).send('Authorization Fail!', e.message);
     }
-
-
 });
 
+const { text } = require('stream/consumers');
 const setCred = async () => {
     try {
-        const token = fs.readFileSync('./tmp/token.json')
-        const tokens = JSON.parse(token);
-
+        const result = await get('token.json', {
+            access: 'private',
+            token: process.env.BLOB_READ_WRITE_TOKEN
+        })
+        const jsonText = await text(result.stream);
+        const tokenData = JSON.parse(jsonText);
+        // console.log(tokenData)
         await oauth2Client.setCredentials(
-            tokens
+            tokenData
         );
         console.log("success full credentials set")
     } catch (e) {
 
-        console.log(e);
+        console.error(e);
         // throw new Error('Authenticate First',e.message);
     }
 }
-// await setCred();
+setCred();
+const pwd = path.join(__dirname + '/tmp/out.mp4')
+
 const youtube = google.youtube({
     version: 'v3',
     auth: oauth2Client
@@ -82,7 +95,7 @@ const ytInsert = async ({ title, tag, description }) => {
                 // }
             },
             media: {
-                body: fs.createReadStream('/tmp/out.mp4')
+                body: fs.createReadStream(pwd)
             }
         }, { uploadType: 'resumable' })
         console.log('uploaded video');
@@ -94,7 +107,7 @@ const ytInsert = async ({ title, tag, description }) => {
 const uploader = async ({ vid_link, title, description, tag }) => {
     // console.log(vid_link)
     console.log('from upload')
-    console.log('axios url : ', vid_link)
+    console.log('axios url get video ')
     try {
         const response = await axios.get(
             vid_link, {
@@ -111,7 +124,7 @@ const uploader = async ({ vid_link, title, description, tag }) => {
         var vs = response.data;
         console.log('fetching');
         // Create a write stream to save the file
-        const writeStream = fs.createWriteStream('/tmp/out.mp4');
+        const writeStream = fs.createWriteStream(pwd);
         // // Handle events
         return await new Promise((resolve, reject) => {
             response.data.pipe(writeStream);

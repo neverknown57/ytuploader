@@ -11,7 +11,7 @@ const title_func = (s) => {
     return s.slice(0, len);
 }
 const hashtags = (s) => {
-    const arr = [];
+    const arr = ["shorts", "ytshorts"];
     const n = s.length;
     let i = 0;
     while (i < n) {
@@ -45,4 +45,6 @@ const meta_data = async (url) => {
 }
 module.exports = {
     meta_data,
+    title_func,
+    hashtags
 }

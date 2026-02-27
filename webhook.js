@@ -1,6 +1,6 @@
 const express = require('express')
 var xhub = require('express-x-hub');
-const msg = require("./insta")
+const { msg } = require("./insta")
 require('dotenv')
 var app = express();
 const webhook = express.Router();

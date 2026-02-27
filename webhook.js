@@ -33,8 +33,12 @@ webhook.post('/instagram', async (req, res) => {
     console.log('Instagram request body:');
     // console.log(req.body);
     // Process the Instagram updates here
+    try {
 
-    msg(req.body.entry)
+        await msg(req.body.entry)
+    } catch (e) {
+        console.error(e);
+    }
     received_updates.unshift(req.body);
     res.sendStatus(200);
     console.e
